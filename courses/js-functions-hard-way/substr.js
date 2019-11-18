@@ -52,45 +52,59 @@
 // 'cat'.length; // 3
 
 
-const substr = (word, begin = 1, end = word.length) => {
+// const substr = (word, begin = 1, end = word.length) => {
 
-    if (end - begin === 0) {
-      return '';
-    }
-
-    if (end + begin < 0) {
-        end = begin + 1;
-    }
-
-
-    if (end > word.length - 1) {
-      end = word.length - 1;
-    }
-    if (begin < 0) {
-      begin = 0;
-    }
-    if (begin > end) {
-      return '';
-    }
+//     if (end - begin === 0) {
+//       return '';
+//     }
+//     if (end > word.length - 1) {
+//       end = word.length - 1;
+//     }
+//     if (begin < 0) {
+//       begin = 0;
+//     }
+//     if (begin > end) {
+//       return '';
+//     }
   
-    let result = '';
-    for (let i = begin; i < end + 1; i++) {
-      result = result + word[i];
-    }
-    return result;
-}
+//     let result = '';
+//     for (let i = begin; i < end + 1; i++) {
+//       result = result + word[i];
+//     }
+//     return result;
+// }
 
+export default (str, index = 0, substrLength = str.length) => {
+  if (index >= str.length) { // если начальный индекс выходит за границу слова справа,
+    return ''; // то возвращаем пустую строку
+  }
 
-console.log(substr(''));
-console.log(substr('abba', 4, -10));
-console.log(substr('abba'));
-console.log(substr('abba', 1, 0));
-console.log(substr('abba', 0, 1));
-console.log(substr('abba', 1, 2));
-console.log(substr('abba', -10, 2));
-console.log(substr('abba', -1, 100));
-console.log(substr('abba', -1, -1));
-console.log(substr('abba', 1, -10));
-console.log(substr('abba', 1, 10));
-console.log(substr('abba', 0, 4));
-console.log(substr('abba', 0, 5));
+  // В учительском решении нормализация сводится к подготовке всего двух переменных:
+  // currentIndex и lastIndex — они формируют диапазон,
+  // из которого будет складываться итоговая подстрока.
+
+  // определяем, где находится первый элемент (его позиция в str)
+  // формируемой подстроки
+  const currentIndex = index < 0 ? 0 : index;
+
+  // определяем, где находится последний элемент (его позиция в str)
+  // формируемой подстроки
+  let lastIndex = currentIndex + (substrLength - 1);
+
+  if (substrLength < 0) { // обрабатываем ситуацию, когда substrLength отрицателен
+    lastIndex = currentIndex;
+  } else if (lastIndex > str.length - 1) { // если конечный индекс выходит за границу строки,
+    lastIndex = str.length - 1; // то считаем, что он равен индексу последнего элемента в str
+  }
+
+  // генерируем подстроку result,
+  // "вырезая" её из исходной строки str
+  let result = '';
+  for (let i = currentIndex; i <= lastIndex; i += 1) {
+    result = `${result}${str[i]}`;
+  }
+
+  return result;
+};
+
+export default substr;
